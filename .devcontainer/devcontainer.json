@@ -1,0 +1,20 @@
+{
+  "name": "ROS2 Humble Dev",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "ros2",
+  "workspaceFolder": "/ros2_ws",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-vscode.cpptools",
+        "eamodio.gitlens"
+      ],
+      "settings": {
+        "editor.formatOnSave": true
+      }
+    }
+  },
+  "postCreateCommand": "cd /ros2_ws && colcon build --symlink-install 2>/dev/null || true",
+  "remoteUser": "root"
+}
