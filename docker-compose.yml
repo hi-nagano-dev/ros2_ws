@@ -1,20 +1,39 @@
 version: '3.8'
+
 services:
   ros2:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: ros2_dev
+
+    # コンテナ起動時に UID=1000 の一般ユーザーを自動作成
+    entrypoint: >
+      bash -c "
+      if ! id -u 1000 >/dev/null 2>&1; then
+        useradd -m -u 1000 devuser;
+      fi;
+      exec /bin/bash
+      "
+
+    # ROS2 ワークスペースの永続化
     volumes:
       - ./src:/ros2_ws/src
       - ros2_build:/ros2_ws/build
       - ros2_install:/ros2_ws/install
       - ros2_log:/ros2_ws/log
+
+      # GUI (RViz, Gazebo) 用
       - /tmp/.X11-unix:/tmp/.X11-unix
+
     environment:
-      - DISPLAY=${DISPLAY:-host.docker.internal:0}
+      - DISPLAY=:0
       - ROS_DOMAIN_ID=0
+
+    # ROS2 の DDS 通信のため必須
     network_mode: host
+
+    # 対話的シェル
     stdin_open: true
     tty: true
 
