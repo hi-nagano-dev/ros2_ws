@@ -17,7 +17,7 @@ Windows + VS Code + WSL2 (Ubuntu) + Docker を利用した ROS2 開発用 ワー
 ## WSL2 (Ubuntu) の環境
 - git
 - 本リポジトリのクローン
-- docker-compose.yml 中のコンテナ名 container_name は他の作成済みのコンテナと重複しないように設定する。
+- docker-compose.yml 中の container_name (コンテナ名) は他の作成済みのコンテナと重複しないように設定する。
 
 ## VSCode で作業 
 - VSCode で ros2_ws フォルダを開く:
@@ -56,23 +56,44 @@ docker compose start
 - ROS2 ノードをデバッグモードで起動
 
     Python の場合
+python パッケージ debugpy がインストールされていなければ　Dockerfile 中に
+```dockerfile
+RUN pip install debugpy
+```
+
+docker-compose.yml中に
+```yml
+    ports:
+      # python debug port
+      - "5678:5678"
+```
 
     VS Code の launch.json で：
 ```json
 {
-    "name": "ROS2 Python Debug",
+    "name": "Python: Remote Debug",
     "type": "python",
     "request": "attach",
     "connect": {
         "host": "localhost",
         "port": 5678
-    }
+    },
+    "pathMappings": [
+        {
+            "localRoot": "${workspaceFolder}",
+            "remoteRoot": "/ros2_ws"
+        }
+    ]
 }
+
 ```
 コンテナ内で：
 ```bash
-python3 -m debugpy --listen 0.0.0.0:5678 your_node.py
+python3 -Xfrozen_modules=off -m debugpy --wait-for-client --listen 0.0.0.0:5678 main.py
 ```
+この後に VS code の左端のパネルにある実行とデバッグ
+
+
 C++ の場合
 
 VS Code の C++ デバッガでコンテナ内プロセスに attach できる。

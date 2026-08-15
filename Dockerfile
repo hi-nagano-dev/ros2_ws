@@ -16,6 +16,10 @@ RUN apt-get update && apt-get install -y \
     lsb-release \
     && rm -rf /var/lib/apt/lists/*
 
+# python debug    
+RUN pip install debugpy
+
+
 WORKDIR /ros2_ws
 
 RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc \
