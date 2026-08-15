@@ -67,24 +67,32 @@ docker-compose.yml中に
       # python debug port
       - "5678:5678"
 ```
+は不要かも
 
     VS Code の launch.json で：
 ```json
 {
-    "name": "Python: Remote Debug",
-    "type": "python",
-    "request": "attach",
-    "connect": {
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Remote Attach",
+      "type": "python",
+      "request": "attach",
+      "connect": {
         "host": "localhost",
         "port": 5678
-    },
-    "pathMappings": [
+      },
+      "pathMappings": [
         {
-            "localRoot": "${workspaceFolder}",
-            "remoteRoot": "/ros2_ws"
+          "localRoot": "${workspaceFolder}/src",
+          "remoteRoot": "/ros2_ws/src"
         }
-    ]
+      ],
+      "justMyCode": false
+    }
+  ]
 }
+
 
 ```
 コンテナ内で：

@@ -37,9 +37,9 @@ services:
     stdin_open: true
     tty: true
 
-    ports:
-      # python debug port
-      - "5678:5678"
+    # ports:
+    #   # python debug port
+    #   - "5678:5678"
 
 volumes:
   ros2_build:
